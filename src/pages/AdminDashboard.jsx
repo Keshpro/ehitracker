@@ -4,7 +4,6 @@ import { Loader2, Download } from 'lucide-react';
 import KPICards from '../components/KPICards';
 import TaskTable from '../components/TaskTable';
 
-// NEW GOOGLE APPS SCRIPT URL EKA
 const API_URL = 'https://script.google.com/macros/s/AKfycbyANd24NfwkXU3zWvd959p3UNguMTYPGabNm_J-wAObzpd2LmHjPowre2YIttvQTnqeww/exec';
 
 export default function AdminDashboard() {
@@ -12,7 +11,6 @@ export default function AdminDashboard() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Data Fetch Karana Function eka
   const fetchTasks = async () => {
     setIsLoading(true);
     try {
@@ -47,7 +45,6 @@ export default function AdminDashboard() {
     fetchTasks();
   }, []);
 
-  // DELETE TASK FUNCTION FOR ADMIN
   const handleDelete = async (taskId) => {
     if (!window.confirm(`Are you sure you want to delete task ${taskId}?`)) return;
     
@@ -68,7 +65,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // CSV Report Export Function
   const exportToCSV = () => {
     if (tasks.length === 0) return alert("No tasks to export!");
     
@@ -102,26 +98,21 @@ export default function AdminDashboard() {
     a.click();
   };
 
-  // Dynamic KPI Data
   const kpiData = {
     completed: tasks.filter(t => t.status === 'Completed').length,
     currentWorking: tasks.filter(t => t.status === 'Current Working').length,
     pending: tasks.filter(t => t.status === 'Pending').length,
     notStarted: tasks.filter(t => t.status === 'Not Started').length,
     planning: tasks.filter(t => t.status === 'Planning').length,
-    avgTime: 'Analytics Syncing...',
+    boostedCount: tasks.filter(t => t.isBoosted === true).length,
+    bottlenecksCount: tasks.filter(t => t.problem && t.problem.trim() !== '').length,
     successRate: tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'Completed').length / tasks.length) * 100) + '%' : '0%',
-    overdueTasks: tasks.filter(t => t.problem !== '').length
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-3 sm:p-4 md:p-8 font-sans flex flex-col justify-between overflow-x-hidden">
-      
       <div>
-        {/* Header Section */}
         <header className="mb-6 md:mb-8 border-b border-gray-700 pb-4 md:pb-5 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-          
-          {/* Logo & Professional Title Area (Still clickable via secret shortcut if needed, or normal clean view) */}
           <div 
             onClick={() => navigate('/editor')}
             className="flex items-center gap-3 md:gap-4 cursor-pointer group"
@@ -142,7 +133,6 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Action / Refresh Buttons Area */}
           <div className="flex items-center justify-between md:justify-end gap-2 sm:gap-3">
             <div className="text-left hidden sm:block">
               <p className="text-xs text-gray-400">System Status</p>
@@ -164,13 +154,10 @@ export default function AdminDashboard() {
               🔄 Refresh
             </button>
           </div>
-
         </header>
 
-        {/* KPI Cards */}
         <KPICards data={kpiData} />
 
-        {/* Task Table */}
         <div className="mb-10">
           {isLoading ? (
             <div className="flex justify-center items-center h-64 bg-gray-800 rounded-2xl border border-gray-700 shadow-inner">
@@ -183,17 +170,15 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Footer Section */}
       <footer className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs md:text-sm flex flex-col md:flex-row items-center justify-between gap-3">
         <p>© 2026 EHI Media. All rights reserved.</p>
         <p className="flex items-center gap-1.5">
-          Designed & Developed with <span className="text-red-500">♥</span> by 
+          Designed & Developed with by 
           <span className="text-gray-300 font-semibold">Keshan Panditharathna</span> 
           <span className="text-gray-600">|</span> 
           <span className="text-red-400 font-medium">KreativeLabs</span>
         </p>
       </footer>
-
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { Plus, Loader2 } from 'lucide-react';
 import KPICards from '../components/KPICards';
 import TaskTable from '../components/TaskTable';
 
-// OYAGE GOOGLE APPS SCRIPT URL EKA
 const API_URL = 'https://script.google.com/macros/s/AKfycbyANd24NfwkXU3zWvd959p3UNguMTYPGabNm_J-wAObzpd2LmHjPowre2YIttvQTnqeww/exec';
 
 export default function EditorDashboard() {
@@ -13,7 +12,6 @@ export default function EditorDashboard() {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Form ekata onawena State eka
   const [formData, setFormData] = useState({
     title: '',
     taskNo: '',
@@ -30,7 +28,6 @@ export default function EditorDashboard() {
     feedback: ''
   });
 
-  // Data Fetch Karana Function eka
   const fetchTasks = async () => {
     setIsLoading(true);
     try {
@@ -77,7 +74,6 @@ export default function EditorDashboard() {
     }
   };
 
-  // EDIT BUTTON EKA CLICK KALAMA
   const handleEdit = (task) => {
     setFormData({
       title: task.title || '',
@@ -98,7 +94,6 @@ export default function EditorDashboard() {
     setIsModalOpen(true);
   };
 
-  // DELETE BUTTON EKA CLICK KALAMA
   const handleDelete = async (taskId) => {
     setIsLoading(true);
     try {
@@ -117,7 +112,6 @@ export default function EditorDashboard() {
     }
   };
 
-  // DATA SAVE/UPDATE KIRIMA
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -168,26 +162,21 @@ export default function EditorDashboard() {
     setIsSaving(false);
   };
 
-  // Dynamic KPI Data
   const kpiData = {
     completed: tasks.filter(t => t.status === 'Completed').length,
     currentWorking: tasks.filter(t => t.status === 'Current Working').length,
     pending: tasks.filter(t => t.status === 'Pending').length,
     notStarted: tasks.filter(t => t.status === 'Not Started').length,
     planning: tasks.filter(t => t.status === 'Planning').length,
-    avgTime: 'Analytics Syncing...',
+    boostedCount: tasks.filter(t => t.isBoosted === true).length,
+    bottlenecksCount: tasks.filter(t => t.problem && t.problem.trim() !== '').length,
     successRate: tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'Completed').length / tasks.length) * 100) + '%' : '0%',
-    overdueTasks: tasks.filter(t => t.problem !== '').length
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-3 sm:p-4 md:p-8 font-sans flex flex-col justify-between overflow-x-hidden">
-      
       <div>
-        {/* Header Section */}
         <header className="mb-6 md:mb-8 border-b border-gray-700 pb-4 md:pb-5 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-          
-          {/* Logo & Professional Title Area */}
           <div className="flex items-center gap-3 md:gap-4">
             <img 
               src="/hero.png" 
@@ -226,10 +215,8 @@ export default function EditorDashboard() {
           </div>
         </header>
 
-        {/* KPI Cards */}
         <KPICards data={kpiData} />
 
-        {/* Task Table */}
         <div className="mb-10">
           {isLoading ? (
             <div className="flex justify-center items-center h-64 bg-gray-800 rounded-2xl border border-gray-700 shadow-inner">
@@ -241,12 +228,10 @@ export default function EditorDashboard() {
           )}
         </div>
 
-        {/* Add / Edit Task Modal - App-like Bottom Sheet on Mobile */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-end md:items-center justify-center z-[100] p-0 md:p-4 overflow-hidden transition-all duration-300">
             <div className="bg-gray-800 rounded-t-2xl md:rounded-2xl border-t md:border border-gray-700 shadow-2xl w-full max-w-3xl max-h-[92vh] md:max-h-[85vh] flex flex-col animate-in slide-in-from-bottom duration-300">
               
-              {/* Modal Sticky Header */}
               <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-700 bg-gray-800 rounded-t-2xl md:rounded-t-2xl sticky top-0 z-20">
                 <h3 className="text-lg md:text-xl font-bold text-white">
                   {isEditing ? 'Edit Task Record' : 'Log New Task / Video'}
@@ -259,11 +244,9 @@ export default function EditorDashboard() {
                 </button>
               </div>
               
-              {/* Scrollable Form Body */}
               <div className="p-4 md:p-6 overflow-y-auto flex-1 space-y-6">
                 <form id="taskForm" className="space-y-5" onSubmit={handleSubmit}>
                   
-                  {/* Section 1: Basic Info */}
                   <div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 shadow-sm">
                     <h4 className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Basic Information</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -297,7 +280,6 @@ export default function EditorDashboard() {
                     </div>
                   </div>
 
-                  {/* Section 2: Production Dates */}
                   <div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 shadow-sm">
                     <h4 className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Production Dates</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -316,17 +298,17 @@ export default function EditorDashboard() {
                     </div>
                   </div>
 
-                  {/* Section 3: Marketing & Reach */}
                   <div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 shadow-sm">
                     <h4 className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Marketing Details</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-gray-400 mb-1.5">Platforms (Select multiple)</label>
-                        <select multiple name="platforms" value={formData.platforms} onChange={handleInputChange} className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-red-500 h-28 transition-colors">
+                        <select multiple name="platforms" value={formData.platforms} onChange={handleInputChange} className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-red-500 h-32 transition-colors">
                           <option value="Facebook">Facebook</option>
                           <option value="Instagram">Instagram</option>
                           <option value="TikTok">TikTok</option>
                           <option value="YouTube">YouTube</option>
+                          <option value="WhatsApp">WhatsApp</option>
                         </select>
                         <p className="text-[11px] text-gray-500 mt-1">Hold Ctrl/Cmd or tap multiple options</p>
                       </div>
@@ -343,7 +325,6 @@ export default function EditorDashboard() {
                     </div>
                   </div>
 
-                  {/* Section 4: Results & Notes */}
                   <div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 shadow-sm">
                     <h4 className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Results & Notes</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -370,7 +351,6 @@ export default function EditorDashboard() {
                 </form>
               </div>
 
-              {/* Modal Sticky Footer Actions */}
               <div className="flex items-center justify-end gap-3 p-4 md:p-5 border-t border-gray-700 bg-gray-800 rounded-b-2xl md:rounded-b-2xl sticky bottom-0 z-20 shadow-lg">
                 <button 
                   type="button" 
@@ -394,7 +374,6 @@ export default function EditorDashboard() {
         )}
       </div>
 
-      {/* Footer Section */}
       <footer className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs md:text-sm flex flex-col md:flex-row items-center justify-between gap-3">
         <p>© 2026 EHI Media. All rights reserved.</p>
         <p className="flex items-center gap-1.5">
@@ -404,7 +383,6 @@ export default function EditorDashboard() {
           <span className="text-red-400 font-medium">KreativeLabs</span>
         </p>
       </footer>
-
     </div>
   );
 }

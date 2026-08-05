@@ -5,7 +5,7 @@ import {
   Hourglass, 
   CircleDashed, 
   Lightbulb, 
-  Timer, 
+  Rocket, 
   Target, 
   AlertTriangle 
 } from 'lucide-react';
@@ -64,20 +64,20 @@ export default function KPICards({ data }) {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          <div className="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg border-l-4 border-l-cyan-500 flex items-center justify-between">
+          <div className="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg border-l-4 border-l-indigo-500 flex items-center justify-between">
             <div>
-              <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Avg Time per Task</h3>
-              <p className="text-2xl font-bold text-white mt-1">{data.avgTime}</p>
+              <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Boosted Posts</h3>
+              <p className="text-2xl font-bold text-white mt-1">{data.boostedCount || 0}</p>
             </div>
-            <div className="bg-cyan-500/10 p-3 rounded-lg">
-              <Timer className="w-8 h-8 text-cyan-500" />
+            <div className="bg-indigo-500/10 p-3 rounded-lg">
+              <Rocket className="w-8 h-8 text-indigo-500" />
             </div>
           </div>
           
           <div className="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg border-l-4 border-l-teal-500 flex items-center justify-between">
             <div>
               <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Success Rate</h3>
-              <p className="text-2xl font-bold text-white mt-1">{data.successRate}</p>
+              <p className="text-2xl font-bold text-white mt-1">{data.successRate || '0%'}</p>
             </div>
             <div className="bg-teal-500/10 p-3 rounded-lg">
               <Target className="w-8 h-8 text-teal-500" />
@@ -86,8 +86,8 @@ export default function KPICards({ data }) {
           
           <div className="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg border-l-4 border-l-red-500 flex items-center justify-between">
             <div>
-              <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Overdue Tasks</h3>
-              <p className="text-2xl font-bold text-white mt-1">{data.overdueTasks}</p>
+              <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Bottlenecks / Issues</h3>
+              <p className="text-2xl font-bold text-white mt-1">{data.bottlenecksCount || 0}</p>
             </div>
             <div className="bg-red-500/10 p-3 rounded-lg">
               <AlertTriangle className="w-8 h-8 text-red-500" />
