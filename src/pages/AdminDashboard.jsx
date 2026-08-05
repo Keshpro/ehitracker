@@ -121,11 +121,11 @@ export default function AdminDashboard() {
         {/* Header Section */}
         <header className="mb-6 md:mb-8 border-b border-gray-700 pb-4 md:pb-5 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           
-          {/* Logo & Professional Title Area (Clickable to switch to Editor View) */}
+          {/* Logo & Professional Title Area (Still clickable via secret shortcut if needed, or normal clean view) */}
           <div 
             onClick={() => navigate('/editor')}
             className="flex items-center gap-3 md:gap-4 cursor-pointer group"
-            title="Click to switch to Editor View"
+            title="Editor View Access"
           >
             <img 
               src="/hero.png" 
@@ -133,12 +133,11 @@ export default function AdminDashboard() {
               className="h-9 sm:h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105" 
             />
             <div className="border-l border-gray-700 pl-3 md:pl-4">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-white group-hover:text-red-400 transition-colors">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-white">
                 EHI Workflow <span className="text-red-500">Overview</span>
               </h1>
-              <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-1 flex-wrap">
-                <span>Social Media & Task Production Tracker (Admin View)</span> 
-                <span className="text-red-400 text-[10px] bg-red-950/60 border border-red-800 px-1.5 py-0.5 rounded-full ml-0.5 group-hover:bg-red-900 transition-colors">Switch to Editor ↗</span>
+              <p className="text-gray-400 text-xs sm:text-sm">
+                Social Media & Task Production Tracker (Admin View)
               </p>
             </div>
           </div>
