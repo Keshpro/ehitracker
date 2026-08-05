@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { FaFacebook, FaYoutube, FaInstagram, FaTiktok } from 'react-icons/fa6';
 
-export default function TaskTable({ tasks, isAdmin }) {
+export default function TaskTable({ tasks, isAdmin, onEdit, onDelete }) {
   const [selectedTask, setSelectedTask] = useState(null);
 
   // Status ekata hariyana color eka dena function eka
@@ -22,6 +22,7 @@ export default function TaskTable({ tasks, isAdmin }) {
 
   // Platform ekata hariyana icon eka pennana function eka (react-icons use karala)
   const renderPlatformIcon = (platform) => {
+    if (!platform) return null;
     switch(platform.toLowerCase()) {
       case 'facebook': return <FaFacebook key={platform} className="w-4 h-4 text-blue-500" title="Facebook" />;
       case 'youtube': return <FaYoutube key={platform} className="w-4 h-4 text-red-500" title="YouTube" />;
@@ -51,34 +52,60 @@ export default function TaskTable({ tasks, isAdmin }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {tasks.map((task) => (
-                <tr key={task.id} className="hover:bg-gray-700/30 transition-colors">
-                  <td className="px-6 py-4 text-sm text-gray-400">#{task.no}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-200">{task.title}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2">
-                      {task.platforms.map(renderPlatformIcon)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(task.status)}`}>
-                      {task.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-center">
-                    <button 
-                      onClick={() => setSelectedTask(task)}
-                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded-lg text-xs font-medium transition-colors"
-                    >
-                      View
-                    </button>
-                    {/* Admin nemei nam (Editor nam) edit karanna button pennanna puluwan */}
-                    {!isAdmin && (
-                      <button className="ml-3 text-yellow-500 hover:text-yellow-400 font-medium text-xs">Edit</button>
-                    )}
+              {tasks.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                    No tasks found. Click "Add New Task" to start logging.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                tasks.map((task) => (
+                  <tr key={task.id || Math.random()} className="hover:bg-gray-700/30 transition-colors">
+                    <td className="px-6 py-4 text-sm text-gray-400 font-medium">#{task.no}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-200">{task.title}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        {task.platforms && task.platforms.map(renderPlatformIcon)}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(task.status)}`}>
+                        {task.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center whitespace-nowrap">
+                      <button 
+                        onClick={() => setSelectedTask(task)}
+                        className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded-lg text-xs font-medium transition-colors inline-block"
+                      >
+                        View
+                      </button>
+                      
+                      {/* Admin nemei nam (Editor nam) Edit saha Delete buttons pennanawa */}
+                      {!isAdmin && (
+                        <>
+                          <button 
+                            onClick={() => onEdit && onEdit(task)} 
+                            className="ml-3 text-yellow-500 hover:text-yellow-400 font-medium text-xs transition-colors inline-block"
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={() => {
+                              if(window.confirm(`Are you sure you want to delete task #${task.no}?`)) {
+                                onDelete && onDelete(task.id);
+                              }
+                            }} 
+                            className="ml-3 text-red-500 hover:text-red-400 font-medium text-xs transition-colors inline-block"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -86,7 +113,7 @@ export default function TaskTable({ tasks, isAdmin }) {
 
       {/* Slide-out Drawer (Side Panel) */}
       {selectedTask && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-[200] flex justify-end">
           {/* Dark Backdrop */}
           <div 
             className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
@@ -123,7 +150,7 @@ export default function TaskTable({ tasks, isAdmin }) {
                 <div className="text-right">
                   <p className="text-gray-400 text-xs uppercase mb-2">Platforms</p>
                   <div className="flex gap-2 justify-end">
-                    {selectedTask.platforms.map(renderPlatformIcon)}
+                    {selectedTask.platforms && selectedTask.platforms.map(renderPlatformIcon)}
                   </div>
                 </div>
               </div>
@@ -160,7 +187,7 @@ export default function TaskTable({ tasks, isAdmin }) {
                     <Users className="w-4 h-4" />
                     <span className="text-xs uppercase">Audience Target</span>
                   </div>
-                  <p className="text-white text-sm">{selectedTask.audience}</p>
+                  <p className="text-white text-sm">{selectedTask.audience || 'General'}</p>
                 </div>
                 
                 <div className="flex items-center justify-between border-t border-gray-700 pt-3">
