@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Loader2, Download } from 'lucide-react';
 import KPICards from '../components/KPICards';
 import TaskTable from '../components/TaskTable';
 
-// OYAGE GOOGLE APPS SCRIPT URL EKA
+// NEW GOOGLE APPS SCRIPT URL EKA
 const API_URL = 'https://script.google.com/macros/s/AKfycbyANd24NfwkXU3zWvd959p3UNguMTYPGabNm_J-wAObzpd2LmHjPowre2YIttvQTnqeww/exec';
+
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Today Date formatted
-  const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   // Data Fetch Karana Function eka
   const fetchTasks = async () => {
@@ -121,18 +121,25 @@ export default function AdminDashboard() {
         {/* Header Section */}
         <header className="mb-6 md:mb-8 border-b border-gray-700 pb-4 md:pb-5 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           
-          {/* Logo & Professional Title Area */}
-          <div className="flex items-center gap-3 md:gap-4">
+          {/* Logo & Professional Title Area (Clickable to switch to Editor View) */}
+          <div 
+            onClick={() => navigate('/editor')}
+            className="flex items-center gap-3 md:gap-4 cursor-pointer group"
+            title="Click to switch to Editor View"
+          >
             <img 
               src="/hero.png" 
               alt="EHI Logo" 
-              className="h-9 sm:h-10 md:h-12 w-auto object-contain" 
+              className="h-9 sm:h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105" 
             />
             <div className="border-l border-gray-700 pl-3 md:pl-4">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-white">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-white group-hover:text-red-400 transition-colors">
                 EHI Workflow <span className="text-red-500">Overview</span>
               </h1>
-              <p className="text-gray-400 text-xs sm:text-sm">Social Media & Task Production Tracker (Admin View)</p>
+              <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-1 flex-wrap">
+                <span>Social Media & Task Production Tracker (Admin View)</span> 
+                <span className="text-red-400 text-[10px] bg-red-950/60 border border-red-800 px-1.5 py-0.5 rounded-full ml-0.5 group-hover:bg-red-900 transition-colors">Switch to Editor ↗</span>
+              </p>
             </div>
           </div>
 
